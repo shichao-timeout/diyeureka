@@ -34,6 +34,10 @@ public class Configuration {
         return SingleTon.instance;
     }
 
+    public String getNodeType(){
+        return this.nodeType;
+    }
+
     /**
      * parse the filepath as properties file,and parse it to properties object,and init this node type.
      * @param filePath the properties file path
