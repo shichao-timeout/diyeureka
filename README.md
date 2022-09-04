@@ -32,7 +32,21 @@ Raft协议，如果一轮投票，发现大家没有选举出来一个leader，�
 #### nacos源码学习
 
 #### 数据如何存储
-借鉴ES和redis cluster的思路，对数据做分片，整个数据集被分成多个shard，分布在多台机器上。
+总体思路：借鉴ES和redis cluster的思路，对数据做分片，整个数据集被分成多个shard，分布在多台机器上。    
+考虑如何复制数据的问题？同步or异步？多种数据复制的策略？  
+容灾与备份：预写日志（WAL）和数据快照。  
+定位数据的分片位置：哈希取模。hash(ip+port)%shard_num,这里初始化分片数量为256.那么就涉及到两层对应关系：服务与shard，shard与机器。这里
+借鉴kafka的做法，有个controller的角色，来管理集群有多少台机器，以及shard如何在这些机器上的分配策略。新的服务注册的时候，首先连接到controller，
+然后controller指定服务应该注册到哪台机器上。  
+controller的选举问题：引入controller又涉及到controller的选举问题：基于raft协议来在master中选举出controller。 
+ 
+
+
+
+  
+
+  
+
 
 
 
