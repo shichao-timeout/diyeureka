@@ -1,7 +1,11 @@
+# just for fun
+写个注册中心吧
+
 ##  参考资料
 https://nacos.io/zh-cn/docs/what-is-nacos.html  
 https://github.com/alibaba/spring-cloud-alibaba   
 https://github.com/Netflix/eureka  
+https://github.com/apache/zookeeper   
 
 ### 目标
 分布式、高可用、可伸缩的服务注册中心，保证服务注册与发现都是秒级以内，可以承载大规模服务实例，高并发的访问，数据一致性，数据不丢失，高可用，高可靠，可伸缩，随时可以扩容。  
@@ -38,7 +42,16 @@ Raft协议，如果一轮投票，发现大家没有选举出来一个leader，�
 定位数据的分片位置：哈希取模。hash(ip+port)%shard_num,这里初始化分片数量为256.那么就涉及到两层对应关系：服务与shard，shard与机器。这里
 借鉴kafka的做法，有个controller的角色，来管理集群有多少台机器，以及shard如何在这些机器上的分配策略。新的服务注册的时候，首先连接到controller，
 然后controller指定服务应该注册到哪台机器上。  
-controller的选举问题：引入controller又涉及到controller的选举问题：基于raft协议来在master中选举出controller。 
+controller的选举问题：引入controller又涉及到controller的选举问题：基于raft协议来在master中选举出controller。master成为controller后，
+需要定期发送心跳给其他master节点，当其他master节点发现controller挂了后，需要重新选举。  
+
+#### 客户端如何更新数据
+两种模式：推模式和拉模式。  
+nacos和eureka采取拉模式，第一次是全量拉取，后面增量拉取，对性能友好。  
+zk采取推模式，采取监听的方式，有新的变动以事件的形式推给客户端，推模式每次变动都会推全量数据。   
+ 
+
+ 
  
 
 
