@@ -1,5 +1,8 @@
 package com.timeout.diy.server.node;
 
+/**
+ * master角色节点
+ */
 public class Master {
     private ControllerCandidate controllerCandidate;
 

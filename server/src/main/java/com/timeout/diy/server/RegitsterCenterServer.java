@@ -9,19 +9,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.timeout.diy.server.config.Configuration;
 
-
-
 /**
  * the main class for register center
- *
  */
 public class RegitsterCenterServer {
     private static final Logger logger = LoggerFactory.getLogger(RegitsterCenterServer.class);
+
     public static void main(String[] args) {
         NodeStatus nodeStatus = NodeStatus.getInstance();
         nodeStatus.setStatus(NodeStatus.INITIALIZING);
         try {
-            //1.read config from config file
+            //1.read config from config file,第一个参数就是配置文件的路径。
             String configFilePath = args[0];
             //todo check args and parse args as the class properties
             if (configFilePath == null) {
@@ -41,7 +39,7 @@ public class RegitsterCenterServer {
 
             //3.wait until the world end...
             waitForShutdown();
-        }catch(ConfigurationException e) {
+        } catch (ConfigurationException e) {
             logger.error("error when parsing configuration file", e);
             System.exit(2);
         } catch (InterruptedException e) {
@@ -51,24 +49,22 @@ public class RegitsterCenterServer {
     }
 
     private static void waitForShutdown() throws InterruptedException {
-        while(NodeStatus.getInstance().getStatus() != NodeStatus.SHUTDOWN){
+        while (NodeStatus.getInstance().getStatus() != NodeStatus.SHUTDOWN) {
             Thread.sleep(300);
         }
     }
 
-    private String getConfigFromArgs(String[] args) throws Exception{
+    private String getConfigFromArgs(String[] args) throws Exception {
         return null;
     }
 
-    private static void startNode(String nodeType){
+    private static void startNode(String nodeType) {
         //when the node type is master
-        if(NodeType.MASTER.equals(nodeType)){
+        if (NodeType.MASTER.equals(nodeType)) {
             Master master = new Master();
             master.start();
         }
     }
-
-
 
 
 }

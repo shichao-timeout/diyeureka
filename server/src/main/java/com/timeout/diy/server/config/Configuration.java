@@ -59,9 +59,9 @@ public class Configuration {
                 this.nodeType = nodeType;
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            throw new ConfigurationException("FileNotFoundException when read config file:",e);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ConfigurationException("IOException when read config file:",e);
         } finally {
             try {
                 fis.close();

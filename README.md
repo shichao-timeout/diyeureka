@@ -21,7 +21,7 @@ Raft协议，如果一轮投票，发现大家没有选举出来一个leader，�
 机器02：投票给自己，机器02，机器02   
 机器01：机器02，投票给机器02，机器02  
 机器03：机器02，机器02，投票给机器02    
-大家发现选票都投完了，发现超过半数的人（全票）都投给了机器02，此时机器02当选为leader，Raft协议本质就是通过随机休眠时间保证说一定会在某一轮中投票出来一个人当选为leader
+大家发现选票都投完了，发现超过半数的人（全票）都投给了机器02，此时机器02当选为leader，Raft协议本质就是通过随机休眠时间保证一定会在某一轮中投票出来一个人当选为leader
 
 #### 2PC与过半写机制  
 刚开始leader受到一个注册请求，uncommitted，他把这个uncommitted请求发送给各个follower，作为第一个阶段，各个follower收到uncommitted请求之后，  
@@ -33,7 +33,7 @@ Raft协议，如果一轮投票，发现大家没有选举出来一个leader，�
 如果注册请求发送到了leader上去，也发送了uncommitted请求到其他follower上去，部分follower收到了请求，但是还没达到半数follower返回ack给Leader，leader就挂了，会导致服务也认为服务注册强求失败了  
 如果已经超过了半数的uncommitted请求的ack给leader了，服务注册请求已经成功了，此时leader崩溃了，选举一个新的leader，会去接收其他follower的ack，如果超过半数follower有ack，直接commit操作  
 
-#### nacos源码学习
+#### nacos源码分析
 
 #### 数据如何存储
 总体思路：借鉴ES和redis cluster的思路，对数据做分片，整个数据集被分成多个shard，分布在多台机器上。    
@@ -50,6 +50,9 @@ controller的选举问题：引入controller又涉及到controller的选举问�
 nacos和eureka采取拉模式，第一次是全量拉取，后面增量拉取，对性能友好。  
 zk采取推模式，采取监听的方式，有新的变动以事件的形式推给客户端，推模式每次变动都会推全量数据。   
  
+#### server与client
+server用于部署成集群，client用于嵌入到各种client端
+
 
  
  
